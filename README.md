@@ -1,7 +1,7 @@
 
 # Online Knowledge Distillation via Mutual Contrastive Learning for Visual Recognition
 
-This project provides part source code for our Online Knowledge Distillation via Mutual Contrastive Learning for Visual Recognition.
+This project provides source code for our Online Knowledge Distillation via Mutual Contrastive Learning for Visual Recognition.
 
 
 ## Installation
