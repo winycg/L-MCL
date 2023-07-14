@@ -45,7 +45,6 @@ parser.add_argument('--resume-checkpoint', default='./checkpoint/resnet32.pth.ta
 parser.add_argument('--evaluate', '-e', action='store_true', help='evaluate model')
 parser.add_argument('--evaluate-checkpoint', default='./checkpoint/resnet32_best.pth.tar', type=str, help='evaluate checkpoint')
 parser.add_argument('--number-net', type=int, default=2, help='number of networks')
-parser.add_argument('--logit-distill', action='store_true', help='combine with logit distillation')
 parser.add_argument('--checkpoint-dir', default='./checkpoint', type=str, help='checkpoint directory')
 
 
@@ -234,12 +233,14 @@ def train(epoch, criterion_list, aggregator, meta_optimizer, weight_optimizer):
             ens_top5_num[i] += top5
         total += targets.size(0)
 
-        print('Epoch:{}, batch_idx:{}/{}, lr:{:.5f}, Duration:{:.2f}, Top-1 Acc:{:.4f}'.format(
+        print('Epoch:{}, batch_idx:{}/{}, lr:{:.5f}, Duration:{:.2f}, Train top-1 Acc:{:.4f}'.format(
             epoch, batch_idx, len(trainloader), lr, time.time()-batch_start_time, (top1_num[0][-1]/total).item()))
 
         if batch_idx % args.meta_freq == 0:
+            print('Perform meta-optimization...')
             data = (inputs, targets)
             for _ in range(args.times):
+                print('Meta-optimization iteration '+str(_))
                 meta_optimizer.zero_grad()
                 meta_optimizer.step(inner_objective, data)
 
@@ -251,6 +252,7 @@ def train(epoch, criterion_list, aggregator, meta_optimizer, weight_optimizer):
             outer_objective(data).backward()
             meta_optimizer.meta_backward()
             weight_optimizer.step()
+            print('Finish meta-optimization.')
 
     acc1 = []
     acc5 = []
@@ -279,7 +281,7 @@ def train(epoch, criterion_list, aggregator, meta_optimizer, weight_optimizer):
                 '\t Train_loss_icl:{:.5f}'
                 '\t Train_loss_soft_icl:{:.5f}'
                 '\n Train top-1 accuracy: {} \n'
-                'Ensemble top-1 accuracy: {}'
+                'Train ensemble top-1 accuracy: {}'
                 .format(epoch, lr, time.time() - start_time,
                         train_loss.avg,
                         train_loss_cls.avg,

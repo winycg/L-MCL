@@ -19,4 +19,5 @@ from .lmcl_shufflenetv2_imagenet import *
 from .lmcl_resnet_imagenet import *
 
 from .meta_network import LossWeightNetwork
-
+from .resnet_imagenet import *
+from .lmcl_hetero_imagenet import *

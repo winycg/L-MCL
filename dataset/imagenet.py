@@ -25,8 +25,6 @@ class ImageFolderSample(datasets.ImageFolder):
 
         self.is_sample = is_sample
 
-        print('stage1 finished!')
-
         if self.is_sample:
             num_classes = len(self.classes)
             num_samples = len(self.samples)
@@ -144,7 +142,7 @@ def get_imagenet_dataloader_sample(data_folder, args, is_sample=True):
                              pin_memory=True)
 
     if args.evaluate is False:
-        print('num_samples', len(train_set.samples))
+        print('train_num_samples', len(train_set.samples))
         print('num_class', len(train_set.classes))
 
         return len(train_set), train_loader, test_loader

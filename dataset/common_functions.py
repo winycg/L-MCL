@@ -222,7 +222,7 @@ def get_labels_to_indices(labels):
     for i, label in enumerate(labels):
         labels_to_indices[label].append(i)
     for k, v in labels_to_indices.items():
-        labels_to_indices[k] = np.array(v, dtype=np.int)
+        labels_to_indices[k] = np.array(v, dtype=int)
     return labels_to_indices
 
 
